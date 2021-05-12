@@ -1,73 +1,78 @@
-//this function will randomly return either ‘Rock’, ‘Paper’ or ‘Scissors"
+let playerScore = 0;
+let computerScore = 0;
+const buttons = document.querySelectorAll('input');
+
+
 function computerPlay() { 
-    let computerChoices = ['Rock', 'Paper', 'Scissors'];
+    let computerChoices = ['rock', 'paper', 'scissors'];
     return computerChoices[Math.floor(Math.random() * computerChoices.length)];
 }
 
-//console.log(computerPlay());
 
-//final result of the game
-function game() {
+function disableButtons() {
+    buttons.forEach(elem => {
+        elem.disabled = true;
+    });
+}
 
-    let playerSelection = prompt("Please enter either Rock, Paper or Scissors: ");//user choice
-    let computerSelection = computerPlay(); //computer choice
 
-    //logic of the game
-    function playRound(playerSelection, computerSelection) {
+function playRound(playerSelection) {
+
+    let computerSelection = computerPlay();
+    let result = '';
+
+    if (playerSelection === 'rock' && computerSelection === 'scissors' ||
+    playerSelection === 'scissors' && computerSelection === 'paper' ||
+    playerSelection === 'paper' && computerSelection === 'rock') {
         
-        if (playerSelection === computerSelection) {
-            return "The Game is a Tie!";
-        };
-        //checking for "Rock"
-        if (playerSelection === "Rock") {
-            if (computerSelection === "Paper") {
-                return "You Lose! Paper beats Rock";
-            } else {
-                return "You Win! Rock beats Scissors";
-            }
-        };
-        //checking for "Paper"
-        if (playerSelection === "Paper") {
-            if (computerSelection === "Scissors") {
-                return "You Lose! Scissors beats Paper";
-            } else {
-                return "You Win! Paper beats Rock";
-            }
-        };
-        //checking for "Scissors"
-        if (playerSelection === "Scissors") {
-            if (computerSelection === "Rock") {
-                return "You Lose! Rock beats Scissors";
-            } else {
-                return "You Win! Scissors beats Paper";
-            }
+        playerScore += 1;
+        result = `You Win! ${playerSelection} beats ${computerSelection}
+        <br><br> Player Score: ${playerScore} 
+        <br> Computer Score: ${computerScore}`;
+
+        if (playerScore === 5) {
+
+            result += '<br><br>You Won the Game!<br> Reload the page to play again';
+            disableButtons();
+            
+        }
+        
+    } else if (playerSelection === computerSelection) {
+
+        result = `The Game is a Tie! You both choose ${playerSelection}
+        <br><br> Player Score: ${playerScore}
+        <br> Computer Score: ${computerScore}`;
+
+    } else {
+
+        computerScore += 1;
+        result = `You Lose! ${computerSelection} beats ${playerSelection}
+        <br><br>Player Score: ${playerScore}<br> Computer Score: ${computerScore}`;
+
+        if (computerScore === 5) {
+
+        result += '<br><br>I won the game! Reload the page to play again'
+        disableButtons()
+
         }
 
-        //alternative logic of the game
+    }
 
-        /*
-        if (playerSelection === computerSelection) {
-            return "Game is a Tie";
-        } else if (playerSelection === "Rock" && computerSelection === "Paper") {
-            return "You Lose!";
-        } else if (playerSelection === "Rock" && computerSelection === "Scissors") {
-            return "You Win!";
-        } else if (playerSelection === "Paper" && computerSelection === "Scissors") {
-            return "You Lose!";
-        } else if (playerSelection === "Paper" && computerSelection === "Rock") {
-            return "You Win!";
-        } else if (playerSelection === "Scissors" && computerSelection === "Rock") {
-            return "You Lose!";
-        } else {
-            return "You Win!";
-        }  
-         */      
-    };
+    document.querySelector('.result').innerHTML = result;
 
-    console.log(playRound(playerSelection, computerSelection)); //print the retult
+    return;
 
 };
 
-game(); //call the final result of the game
+buttons.forEach(button => {
+
+    button.addEventListener('click', function () {
+
+        playRound(button.value)
+        
+    })
+
+});
+
 
 
